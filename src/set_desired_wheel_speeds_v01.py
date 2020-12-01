@@ -20,7 +20,7 @@ from mobrob_util.msg import ME439WheelSpeeds
 # Example: Move Forward and Back, 2s each, 0.3 meters per second: 
 stage_settings = np.array( [ [0.0, 0.0, 0.0], [5.0,0.3, 0.3], [5.0, -0.3, -0.3], [2.0, 0.0, 0.0]] )
 # Example: forward, turn, return to home, turn. 
-stage_settings = np.array( [ [0,0,0],[3,0.100,0.100],[1,0,0],[1,0.196,-0.196],[1,0,0],[3,0.100,0.100],[1,0,0],[1,-0.196,0.196],[1,0,0]] )
+#stage_settings = np.array( [ [0,0,0],[3,0.100,0.100],[1,0,0],[1,0.196,-0.196],[1,0,0],[3,0.100,0.100],[1,0,0],[1,-0.196,0.196],[1,0,0]] )
 
 # Convert it into a numpy array
 stage_settings_array = np.array(stage_settings)
