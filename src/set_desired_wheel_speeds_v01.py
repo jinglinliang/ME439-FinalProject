@@ -39,6 +39,8 @@ def talker():
 
     # Create the publisher. Name the topic "sensors_data", with message type "Sensors"
     pub_speeds = rospy.Publisher('/wheel_speeds_desired', ME439WheelSpeeds, queue_size=10)
+    # create subscriber for raw sensor data, still need a function to turn msg_in data to wheel speeds
+    sub_raw_data = rospy.Subscriber('/sensors_data_raw', ME439SensorsRaw, filler_function)
     # Declare the message that will go on that topic. 
     # Here we use one of the message name types we Imported, and add parentheses to call it as a function. 
     # We could also put data in it right away using . 
