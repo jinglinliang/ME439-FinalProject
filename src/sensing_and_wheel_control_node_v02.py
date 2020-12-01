@@ -279,7 +279,8 @@ def serial_port_publisher(quad_encoders, mot_controllers):
 if __name__ == '__main__':
     try: 
         talker()
-    except rospy.ROSInterruptException: 
+    except rospy.ROSInterruptException:
+	print("This is an exception") 
         traceback.print_exc()
         # Stop the wheels if this crashes or otherwise ends. 
         stop_wheel_speeds_message = ME439WheelSpeeds()
