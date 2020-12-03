@@ -18,7 +18,7 @@ from mobrob_util.msg import ME439WheelSpeeds
 # np.array([[duration, left_wheel_speed, right_wheel_speed], [duration, left_wheel_speed, right_wheel_speed], ...]
 # 
 # Example: Move Forward and Back, 2s each, 0.3 meters per second: 
-stage_settings = np.array( [ [0.0, 0.0, 0.0], [5.0,0.3, 0.3], [5.0, -0.3, -0.3], [2.0, 0.0, 0.0]] )
+stage_settings = np.array( [ [0.0, 0.0, 0.0]] )
 # Example: forward, turn, return to home, turn. 
 #stage_settings = np.array( [ [0,0,0],[3,0.100,0.100],[1,0,0],[1,0.196,-0.196],[1,0,0],[3,0.100,0.100],[1,0,0],[1,-0.196,0.196],[1,0,0]] )
 
@@ -30,6 +30,11 @@ stage_settings_array[:,0] = np.cumsum(stage_settings_array[:,0],0)  # cumsum = "
 # =============================================================================
 # # END of section on specifying movements with wheel speeds and durations. 
 # =============================================================================
+def stagesettings(msg_in):
+
+    desired_reading = 30 # target sensor reading for distance from the wall
+    distance = desired_reading - msg_in.a0 # for sensor on right side of robot, robot distance from desired location
+    print(distance)
 
 
 # Publish desired wheel speeds at the appropriate time. 
@@ -40,7 +45,7 @@ def talker():
     # Create the publisher. Name the topic "sensors_data", with message type "Sensors"
     pub_speeds = rospy.Publisher('/wheel_speeds_desired', ME439WheelSpeeds, queue_size=10)
     # create subscriber for raw sensor data, still need a function to turn msg_in data to wheel speeds
-    sub_raw_data = rospy.Subscriber('/sensors_data_raw', ME439SensorsRaw, filler_function)
+    sub_raw_data = rospy.Subscriber('/sensors_data_raw', ME439SensorsRaw, stagesettings)
     # Declare the message that will go on that topic. 
     # Here we use one of the message name types we Imported, and add parentheses to call it as a function. 
     # We could also put data in it right away using . 
