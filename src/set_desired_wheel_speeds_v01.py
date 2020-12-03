@@ -7,7 +7,7 @@ import numpy as np
 # we import it "from" the ROS package we created it in (here "mobrob") with an extension of .msg ...
 # and actually import the message type by name (here "ME439WheelSpeeds")
 from mobrob_util.msg import ME439WheelSpeeds
-
+from mobrob_util.msg import ME439SensorsRaw
 
 # =============================================================================
 #     Set up a time course of commands
