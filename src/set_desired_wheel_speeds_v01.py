@@ -26,15 +26,23 @@ stage_settings = np.array( [ [0.0, 0.0, 0.0]] )
 stage_settings_array = np.array(stage_settings)
 # Convert the first column to a series of times (elapsed from the beginning) at which to switch settings. 
 stage_settings_array[:,0] = np.cumsum(stage_settings_array[:,0],0)  # cumsum = "cumulative sum". The last Zero indicates that it should be summed along the first dimension (down a column). 
-
+distance = 0
+vel_left = 0
+vel_right = 0
 # =============================================================================
 # # END of section on specifying movements with wheel speeds and durations. 
 # =============================================================================
 def stagesettings(msg_in):
-
+    global distance, vel_left, vel_right
     desired_reading = 30 # target sensor reading for distance from the wall
-    distance = desired_reading - msg_in.a0 # for sensor on right side of robot, robot distance from desired location
-    print(distance)
+    distance = desired_reading - msg_in.a0 # for sensor on left side of robot, robot distance from desired location
+    if np.abs(distance) > 10:
+        vel_left = 0.01
+        vel_right = 0
+    else:
+        vel_left = 0
+        vel_right = 0.01
+    print distance
 
 
 # Publish desired wheel speeds at the appropriate time. 
@@ -45,7 +53,7 @@ def talker():
     # Create the publisher. Name the topic "sensors_data", with message type "Sensors"
     pub_speeds = rospy.Publisher('/wheel_speeds_desired', ME439WheelSpeeds, queue_size=10)
     # create subscriber for raw sensor data, still need a function to turn msg_in data to wheel speeds
-    sub_raw_data = rospy.Subscriber('/sensors_data_raw', ME439SensorsRaw, stagesettings)
+    sub_distance = rospy.Subscriber('/sensors_data_raw', ME439SensorsRaw, stagesettings)
     # Declare the message that will go on that topic. 
     # Here we use one of the message name types we Imported, and add parentheses to call it as a function. 
     # We could also put data in it right away using . 
@@ -60,20 +68,21 @@ def talker():
         t_start = rospy.get_rostime()
         
         while not rospy.is_shutdown():
-            future_stages = np.argwhere( stage_settings_array[:,0] >= (rospy.get_rostime()-t_start).to_sec() ) 
+            """future_stages = np.argwhere( stage_settings_array[:,0] >= (rospy.get_rostime()-t_start).to_sec() ) 
             if len(future_stages)>0:
                 stage = future_stages[0]
                 print stage
             else: 
                 break
-            msg_out.v_left = stage_settings_array[stage,1]
-            msg_out.v_right = stage_settings_array[stage,2]
+                """
+            msg_out.v_left = vel_left
+            msg_out.v_right = vel_right
             # Actually publish the message
             pub_speeds.publish(msg_out)
             # Log the info (optional)
 #            rospy.loginfo(pub_speeds)    
             
-            r.sleep()
+#            r.sleep()
         
 #        # Here step through the settings. 
 #        for stage in range(0,len(stage_settings_array)):  # len gets the length of the array (here the number of rows)
