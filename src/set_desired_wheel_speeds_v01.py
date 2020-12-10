@@ -62,7 +62,7 @@ def talker():
     msg_out.v_right = 0
     
     # set up a rate basis to keep it on schedule.
-    r = rospy.Rate(100) # N Hz
+    r = rospy.Rate(10) # N Hz
     try: 
         # start a loop 
         t_start = rospy.get_rostime()
@@ -82,7 +82,7 @@ def talker():
             # Log the info (optional)
 #            rospy.loginfo(pub_speeds)    
             
-#            r.sleep()
+            r.sleep()
         
 #        # Here step through the settings. 
 #        for stage in range(0,len(stage_settings_array)):  # len gets the length of the array (here the number of rows)
