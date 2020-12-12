@@ -36,13 +36,37 @@ def stagesettings(msg_in):
     global distance, vel_left, vel_right
     desired_reading = 30 # target sensor reading for distance from the wall
     distance = desired_reading - msg_in.a0 # for sensor on left side of robot, robot distance from desired location
-    if np.abs(distance) > 10:
-        vel_left = 0.1
-        vel_right = 0
+    vel_max = 0.05  # maximum wheel speed
+    vel_control = 0.005  # velocity proportional control
+    if distance > 5:  # robot is to the left of the desired path
+        vel_left = vel_control * distance
+        vel_right = vel_left * 0.5
+        if (vel_left + vel_right) / 2 > vel_max:
+            vel_left = 0.8 * vel_max
+            vel_right = 0.2 * vel_max
+        else:
+            pass
+
+    elif distance < -5:  # robot is to the right of the desired path
+        vel_right = vel_control * distance
+        vel_left = vel_right * 0.5
+        if (vel_left + vel_right) / 2 > vel_max:
+            vel_right = 0.8 * vel_max
+            vel_left = 0.2 * vel_max
+        else:
+            pass
+
     else:
-        vel_left = 0
-        vel_right = 0.1
-    print distance
+        vel_left = vel_max / 2
+        vel_right = vel_max / 2
+
+#    if np.abs(distance) > 10:
+#        vel_left = 0.01
+#        vel_right = 0
+#    else:
+#        vel_left = 0
+#        vel_right = 0.01
+
 
 
 # Publish desired wheel speeds at the appropriate time. 
