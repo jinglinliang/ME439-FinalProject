@@ -60,12 +60,27 @@ def stagesettings(msg_in):
         vel_right = 0.1
         far_flag = True
 '''
-    if sleep1:
-	rospy.sleep(0.6)
-	sleep1 = False
-	
     vel_max = 0.2  # maximum wheel speed
     vel_control = 0.01  # velocity proportional control
+    if sleep3:
+        rospy.sleep(0.6) # pivot time
+        sleep3 = False
+    
+    if sleep2:
+        rospy.sleep(0.5) # will move 50 cm in a straight line for a half second sleep
+        vel_right = -0.05
+        vel_left = 0.05
+        sleep2 = False
+        sleep3 = True
+    
+    if sleep1:
+        rospy.sleep(0.6) # pivot time
+        sleep1 = False
+        sleep2 = True
+        vel_left = 0.1
+        vel_right = 0.1
+	
+
     if distance > 2:  # robot is to the left of the desired path
         vel_left = vel_control * distance
         vel_right = vel_left * 0.5
@@ -85,12 +100,10 @@ def stagesettings(msg_in):
         else:
             pass
 	'''
-	vel_right = 0.05
-	vel_left = -0.05
-	# rospy.sleep(0.6)
-	sleep1 = True
-	sleep2 = True
-	sleep3 = True
+        vel_right = 0.05
+        vel_left = -0.05
+        sleep1 = True
+       
 
     else:
         vel_left = vel_max * 0.67
