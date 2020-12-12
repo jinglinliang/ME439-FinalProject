@@ -37,11 +37,11 @@ def stagesettings(msg_in):
     desired_reading = 30 # target sensor reading for distance from the wall
     distance = desired_reading - msg_in.a0 # for sensor on left side of robot, robot distance from desired location
     if np.abs(distance) > 10:
-        vel_left = 0.01
+        vel_left = 0.1
         vel_right = 0
     else:
         vel_left = 0
-        vel_right = 0.01
+        vel_right = 0.1
     print distance
 
 
