@@ -29,16 +29,44 @@ stage_settings_array[:,0] = np.cumsum(stage_settings_array[:,0],0)  # cumsum = "
 distance = 0
 vel_left = 0
 vel_right = 0
+far_flag = False
+sleep1 = False
+sleep2 = False
+sleep3 = False
 # =============================================================================
 # # END of section on specifying movements with wheel speeds and durations. 
 # =============================================================================
 def stagesettings(msg_in):
-    global distance, vel_left, vel_right
-    desired_reading = 30 # target sensor reading for distance from the wall
+    global distance, vel_left, vel_right, far_flag, sleep1, sleep2, sleep3
+    desired_reading = 15 # target sensor reading for distance from the wall
     distance = desired_reading - msg_in.a0 # for sensor on left side of robot, robot distance from desired location
-    vel_max = 0.05  # maximum wheel speed
-    vel_control = 0.005  # velocity proportional control
-    if distance > 5:  # robot is to the left of the desired path
+'''
+    if msg_in.a0 < 15:
+        vel_left = 0.1
+        vel_right = 0.05
+        far_flag = False
+    elif msg_in.a0 > 15 and msg_in.a0 < 20:
+        vel_left = 0.1
+        vel_right = 0.1
+    elif msg_in.a0 > 20 and msg_in.a0 < 30:
+        if not far_flag:
+            vel_left = 0.05
+            vel_right = 0.1
+        else:
+            vel_left = 0.1
+            vel_right = 0.1
+    else:
+        vel_left = 0.1
+        vel_right = 0.1
+        far_flag = True
+'''
+    if sleep1:
+	rospy.sleep(0.6)
+	sleep1 = False
+	
+    vel_max = 0.2  # maximum wheel speed
+    vel_control = 0.01  # velocity proportional control
+    if distance > 2:  # robot is to the left of the desired path
         vel_left = vel_control * distance
         vel_right = vel_left * 0.5
         if (vel_left + vel_right) / 2 > vel_max:
@@ -47,18 +75,26 @@ def stagesettings(msg_in):
         else:
             pass
 
-    elif distance < -5:  # robot is to the right of the desired path
-        vel_right = vel_control * distance
+    elif distance < -2:  # robot is to the right of the desired path
+	'''
+        vel_right = vel_control * -distance
         vel_left = vel_right * 0.5
         if (vel_left + vel_right) / 2 > vel_max:
             vel_right = 0.8 * vel_max
             vel_left = 0.2 * vel_max
         else:
             pass
+	'''
+	vel_right = 0.05
+	vel_left = -0.05
+	# rospy.sleep(0.6)
+	sleep1 = True
+	sleep2 = True
+	sleep3 = True
 
     else:
-        vel_left = vel_max / 2
-        vel_right = vel_max / 2
+        vel_left = vel_max * 0.67
+        vel_right = vel_max * 0.67
 
 #    if np.abs(distance) > 10:
 #        vel_left = 0.01
@@ -66,6 +102,7 @@ def stagesettings(msg_in):
 #    else:
 #        vel_left = 0
 #        vel_right = 0.01
+
 
 
 
