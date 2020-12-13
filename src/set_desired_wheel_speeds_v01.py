@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 import rospy
 import traceback 
 import numpy as np
@@ -16,8 +15,8 @@ def stagesettings(msg_in):
 
     if distance < 15:
         far_flag = False
-        vel_left = 0.1 + 0.1 * (distance - 15)/15
-        vel_right = 0.1 - 0.1 * (distance - 15)/15
+        vel_left = 0.1 + 0.1 * np.abs(distance - 15)/15
+        vel_right = 0.1 - 0.1 * np.abs(distance - 15)/15
     elif distance >= 15 and distance < 18:
         vel_left  = 0.1
         vel_right = 0.1
@@ -26,8 +25,8 @@ def stagesettings(msg_in):
             vel_left  = 0.1
             vel_right = 0.1
         else:
-            vel_right = 0.1 + 0.1 * (distance - 15)/15
-            vel_left = 0.1 - 0.1 * (distance - 15)/15
+            vel_left = 0.1 - 0.1 * np.abs(distance - 18)/15
+            vel_right = 0.1 + 0.1 * np.abs(distance - 18)/15
     else:
         far_flag = True
         vel_left  = 0.1
