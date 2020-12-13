@@ -69,7 +69,7 @@ def stagesettings(msg_in):
     
     if sleep2:
         rospy.sleep(3) # will move 5 cm in a straight line for a half second sleep
-	    sleep2 = False
+	sleep2 = False
         sleep3 = True
         vel_right = -0.05
         vel_left = 0.05
