@@ -33,6 +33,9 @@ def stagesettings(msg_in):
             vel_left = 0.1 - 0.1 * np.abs(distance - 16)/15
             vel_right = 0.1 + 0.1 * np.abs(distance - 16)/15
             zone_current = 3.5
+    elif distance >= 31 and distance < 41:
+        vel_left = 0.5
+        vel_right = 0.9
     else:
         far_flag = True
         vel_left  = 0.1
@@ -40,7 +43,7 @@ def stagesettings(msg_in):
         zone_current = 4
 
     if zone_current != zone_previous:
-        print("zone changed")
+        print("zone changed to: {}".format(zone_current))
     zone_previous = zone_current
     
 
