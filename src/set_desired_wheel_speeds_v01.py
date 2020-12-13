@@ -14,37 +14,31 @@ def stagesettings(msg_in):
     global vel_left, vel_right, far_flag, zone_previous
     distance = msg_in.a0
 
-
     if distance < 15:
         far_flag = False
         vel_left = 0.1 + 0.1 * np.abs(distance - 15)/15
         vel_right = 0.1 - 0.1 * np.abs(distance - 15)/15
-        zone_current = 1
     elif distance >= 15 and distance < 16:
         vel_left  = 0.1
         vel_right = 0.1
-        zone_current = 2
     elif distance >= 16 and distance < 31:
         if far_flag:
             vel_left  = 0.1
             vel_right = 0.1
-            zone_current = 3
         else:
             vel_left = 0.1 - 0.1 * np.abs(distance - 16)/15
             vel_right = 0.1 + 0.1 * np.abs(distance - 16)/15
-            zone_current = 3.5
     elif distance >= 31 and distance < 41:
-        vel_left = 0.5
-        vel_right = 0.9
+        if far_flag:
+            vel_left = 0.1
+            vel_right = 0.1
+        else:
+            vel_left = 0.5
+            vel_right = 0.9
     else:
         far_flag = True
         vel_left  = 0.1
         vel_right = 0.1
-        zone_current = 4
-
-    if zone_current != zone_previous:
-        print("zone changed to: {}".format(zone_current))
-    zone_previous = zone_current
     
 
 # Publish desired wheel speeds at the appropriate time. 
