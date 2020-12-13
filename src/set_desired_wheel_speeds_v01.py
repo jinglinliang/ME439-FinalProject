@@ -6,12 +6,12 @@ from mobrob_util.msg import ME439WheelSpeeds
 from mobrob_util.msg import ME439SensorsRaw
 
 # Global Variables
-distance = 0
 vel_left = 0
 vel_right = 0
 far_flag = False
 def stagesettings(msg_in):
-    global distance, vel_left, vel_right, far_flag
+    global vel_left, vel_right, far_flag
+    distance = msg_in.a0
 
     if distance < 15:
         far_flag = False
