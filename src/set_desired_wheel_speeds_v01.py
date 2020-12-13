@@ -40,7 +40,7 @@ def stagesettings(msg_in):
     global distance, vel_left, vel_right, far_flag, sleep1, sleep2, sleep3
     desired_reading = 15 # target sensor reading for distance from the wall
     distance = desired_reading - msg_in.a0 # for sensor on left side of robot, robot distance from desired location
-'''
+    '''
     if msg_in.a0 < 15:
         vel_left = 0.1
         vel_right = 0.05
@@ -59,26 +59,29 @@ def stagesettings(msg_in):
         vel_left = 0.1
         vel_right = 0.1
         far_flag = True
-'''
+    '''
     vel_max = 0.2  # maximum wheel speed
     vel_control = 0.01  # velocity proportional control
     if sleep3:
-        rospy.sleep(0.6) # pivot time
+        rospy.sleep(1.2) # pivot time
         sleep3 = False
+	return
     
     if sleep2:
-        rospy.sleep(0.5) # will move 50 cm in a straight line for a half second sleep
+        rospy.sleep(3) # will move 5 cm in a straight line for a half second sleep
+	sleep2 = False
+        sleep3 = True
         vel_right = -0.05
         vel_left = 0.05
-        sleep2 = False
-        sleep3 = True
+	return
     
     if sleep1:
-        rospy.sleep(0.6) # pivot time
+        rospy.sleep(1.2) # pivot time
         sleep1 = False
         sleep2 = True
         vel_left = 0.1
         vel_right = 0.1
+	return
 	
 
     if distance > 2:  # robot is to the left of the desired path
